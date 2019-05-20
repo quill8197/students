@@ -6,6 +6,8 @@
  * Time: 1:45
  */
 
+require '/home/smcconne/config-student.php';
+
 class Database
 {
     private $_dbh;
@@ -19,13 +21,8 @@ class Database
     {
         try
         {
-            define('DB_DSN', 'mysql:dbname=smcconne_it328');
-            define('DB_USERNAME', 'smcconne_students');
-            define('DB_PASSWORD', 'grc_user!');
-
             //Instantiate a new database
             $this->_dbh = new PDO(DB_DSN,DB_USERNAME, DB_PASSWORD);
-            echo 'Connected to database!';
             return $this->_dbh;
         }
         catch (PDOException $e)
@@ -33,5 +30,21 @@ class Database
             echo $e->getMessage();
             return; //end the script
         }
+    }
+
+    function getStudents()
+    {
+        // Define the query
+        $sql = "SELECT * FROM student ORDER BY last, first";
+
+        // Prepare the statement
+        $statement = $this->_dbh->prepare($sql);
+
+        // Execute the statement
+        $statement->execute();
+
+        // Return the result
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
 }

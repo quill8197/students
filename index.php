@@ -20,9 +20,14 @@ $f3 = Base::instance();
 $db = new Database();
 
 // Define a default route
-$f3->route('GET /', function()
+$f3->route('GET /', function($f3)
 {
-    echo '<h1>GRC Students</h1>';
+    global $db;
+    $students = $db->getStudents();
+
+    $f3->set('students', $students);
+    $template = new Template();
+    echo $template->render('views/all-students.html');
 });
 
 // Run fat-free
